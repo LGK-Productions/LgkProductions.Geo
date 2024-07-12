@@ -1,10 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <WarningsAsErrors>nullable</WarningsAsErrors>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>nullable</WarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Nuget">
+		<Version>0.1.0-beta</Version>
+		<PackageDescription>A small library containing data classes used in geo applications</PackageDescription>
+		<Company>LgkProductions</Company>
+		<RepositoryUrl>https://github.com/LGK-Productions/LgkProductions.Geo</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup Label="Nuget">
+		<Content Include="../README.md">
+			<PackagePath>/</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+		<Content Include="../LICENSE">
+			<PackagePath>/</PackagePath>
+			<Pack>true</Pack>
+		</Content>
+	</ItemGroup>
 
 </Project>
