@@ -7,16 +7,10 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
     }
 
     /// <summary>
-    /// Calculates top left sub-tile id of the current tile
+    /// Calculates the neighbouring TileId
     /// </summary>
-    /// <param name="zoomDifference">The zoom difference</param>
-    /// <returns>The <see cref="TileId"/> of the top left sub-tile</returns>
-    public TileId GetTopLeftSubTile(int zoomDifference = 1)
-    {
-        return new TileId(Coordinates * (int)Math.Pow(2, zoomDifference),
-            Zoom + zoomDifference);
-    }
-
+    /// <param name="direction">The direction to calculate the neighbour of</param>
+    /// <returns>The neighbouring TileId</returns>
     public TileId GetNeighbour(TileCoordinate direction)
     {
         return new TileId(Coordinates + direction, Zoom);

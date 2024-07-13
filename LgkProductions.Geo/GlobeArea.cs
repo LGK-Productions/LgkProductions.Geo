@@ -30,25 +30,25 @@ public readonly record struct GlobeArea
     /// </summary>
     public GlobePoint MidPoint { get; }
 
-    public GlobePoint NorthEastPoint => new(BoundsLat.Max, BoundsLon.Max);
-    public GlobePoint NorthWestPoint => new(BoundsLat.Max, BoundsLon.Min);
-    public GlobePoint SouthEastPoint => new(BoundsLat.Min, BoundsLon.Max);
-    public GlobePoint SouthWestPoint => new(BoundsLat.Min, BoundsLon.Min);
+    public GlobePoint NorthEastCorner => new(BoundsLat.Max, BoundsLon.Max);
+    public GlobePoint NorthWestCorner => new(BoundsLat.Max, BoundsLon.Min);
+    public GlobePoint SouthEastCorner => new(BoundsLat.Min, BoundsLon.Max);
+    public GlobePoint SouthWestCorner => new(BoundsLat.Min, BoundsLon.Min);
 
     /// <summary>
     /// Creates a new <see cref="GlobeArea"/> with the <see cref="GlobePoint"/> in the north-west,
     /// and the <see cref="GlobePoint"/> in the south-east of the target area
     /// </summary>
-    /// <param name="northWestPoint">A <see cref="GlobePoint"/> at the north-west corner of the target area</param>
-    /// <param name="southEastPoint">A <see cref="GlobePoint"/> at the south-east corner of the target area</param>
-    public GlobeArea(GlobePoint northWestPoint, GlobePoint southEastPoint)
+    /// <param name="corner1">A <see cref="GlobePoint"/> at a corner of the target area</param>
+    /// <param name="corner2">A <see cref="GlobePoint"/> at a corner of the target area</param>
+    public GlobeArea(GlobePoint corner1, GlobePoint corner2)
     {
-        BoundsLat = new Bounds<double>(southEastPoint.Latitude, northWestPoint.Latitude);
-        BoundsLon = new Bounds<double>(northWestPoint.Longitude, southEastPoint.Longitude);
+        BoundsLat = new Bounds<double>(corner1.Latitude, corner2.Latitude);
+        BoundsLon = new Bounds<double>(corner1.Longitude, corner2.Longitude);
 
         //get Midpoint
-        var lat = BoundsLat.Min + AreaHeight / 2;
-        var lon = BoundsLon.Min + AreaWidth / 2;
+        var lat = BoundsLat.Min + BoundsLat.Size / 2;
+        var lon = BoundsLon.Min + BoundsLon.Size / 2;
         MidPoint = new GlobePoint(lat, lon);
     }
 
@@ -64,8 +64,8 @@ public readonly record struct GlobeArea
         {
             for (var j = 0; j < resolution; j++)
             {
-                pointGrid.Add(new GlobePoint(BoundsLat.Min + i * (AreaHeight / (resolution - 1)),
-                    BoundsLon.Min + j * (AreaWidth / (resolution - 1))));
+                pointGrid.Add(new GlobePoint(BoundsLat.Min + i * (BoundsLat.Size / (resolution - 1)),
+                    BoundsLon.Min + j * (BoundsLon.Size / (resolution - 1))));
             }
         }
 
@@ -109,8 +109,8 @@ public readonly record struct GlobeArea
     /// <returns>The <see cref="GlobePoint"/> in the GlobeArea, nearest to the given <see cref="GlobePoint"/></returns>
     public GlobePoint GetClosestPoint(GlobePoint globePoint)
     {
-        var lat = Math.Clamp(globePoint.Latitude, BoundsLat.Min, BoundsLat.Max);
-        var lon = Math.Clamp(globePoint.Longitude, BoundsLon.Min, BoundsLon.Max);
+        var lat = BoundsLat.Clamp(globePoint.Latitude);
+        var lon = BoundsLon.Clamp(globePoint.Longitude);
 
         return new GlobePoint(lat, lon);
     }

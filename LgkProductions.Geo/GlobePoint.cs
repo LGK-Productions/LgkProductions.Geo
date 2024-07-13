@@ -41,4 +41,8 @@ public readonly record struct GlobePoint
 
     public static GlobePoint operator +(GlobePoint a, GlobePoint b)
         => new(a.Latitude + b.Latitude, a.Longitude + b.Longitude, a.Altitude + b.Altitude);
+    public static GlobePoint operator -(GlobePoint a, GlobePoint b)
+        => new(a.Latitude - b.Latitude, a.Longitude - b.Longitude, a.Altitude - b.Altitude);
+    public static GlobePoint operator /(GlobePoint a, double value)
+        => new(a.Latitude / value, a.Longitude / value, a.Altitude / value);
 }

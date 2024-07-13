@@ -38,9 +38,9 @@ public interface ITileProjection
     /// <returns>An IEnumerable of tiles covering the given <see cref="GlobeArea"/></returns>
     public IEnumerable<TileId> GlobeAreaToTiles(GlobeArea globeArea, int zoomFactor)
     {
-        var tileCoordinates = GlobePointToTileCoordinates(globeArea.NorthWestPoint, zoomFactor);
-        var ne = GlobePointToTileCoordinates(globeArea.NorthEastPoint, zoomFactor);
-        var sw = GlobePointToTileCoordinates(globeArea.SouthWestPoint, zoomFactor);
+        var tileCoordinates = GlobePointToTileCoordinates(globeArea.NorthWestCorner, zoomFactor);
+        var ne = GlobePointToTileCoordinates(globeArea.NorthEastCorner, zoomFactor);
+        var sw = GlobePointToTileCoordinates(globeArea.SouthWestCorner, zoomFactor);
         for (var x = tileCoordinates.X; x <= ne.X; x++)
         {
             for (var y = tileCoordinates.Y; y <= sw.Y; y++)
@@ -68,9 +68,9 @@ public interface ITileProjection
 
         while (true)
         {
-            var tileCoordinates = GlobePointToTileCoordinates(globeArea.NorthWestPoint, currentZoom);
-            var ne = GlobePointToTileCoordinates(globeArea.NorthEastPoint, currentZoom);
-            var sw = GlobePointToTileCoordinates(globeArea.SouthWestPoint, currentZoom);
+            var tileCoordinates = GlobePointToTileCoordinates(globeArea.NorthWestCorner, currentZoom);
+            var ne = GlobePointToTileCoordinates(globeArea.NorthEastCorner, currentZoom);
+            var sw = GlobePointToTileCoordinates(globeArea.SouthWestCorner, currentZoom);
 
 
             if ((ne.X - tileCoordinates.X + 1) * (sw.Y - tileCoordinates.Y + 1) > targetTileCount)

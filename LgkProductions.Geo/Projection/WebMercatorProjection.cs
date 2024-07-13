@@ -12,7 +12,7 @@
 /// https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 /// </para>
 /// </summary>
-public class WebMercatorPointProjection : IPointProjection, ITileProjection
+public sealed class WebMercatorProjection : IProjection
 {
     public string Type { get; } = "WebMercator";
 
