@@ -1,5 +1,8 @@
 ﻿namespace LgkProductions.Geo.Projection;
 
+/// <summary>
+/// Projects <see cref="GlobePoint"/>/<see cref="GlobeArea"/> to <see cref="TileId"/> and vice versa. 
+/// </summary>
 public interface ITileProjection
 {
     /// <summary>

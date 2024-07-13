@@ -14,8 +14,6 @@
 /// </summary>
 public sealed class WebMercatorProjection : IProjection
 {
-    public string Type { get; } = "WebMercator";
-
     /// <summary>
     /// The Earth's radius in metres
     /// </summary>
@@ -31,7 +29,7 @@ public sealed class WebMercatorProjection : IProjection
     /// based on the given points position.
     /// </summary>
     /// <param name="globePoint">The <see cref="GlobePoint"/> to be converted</param>
-    /// <returns>A position with XZ point in Spherical Mercator EPSG:900913 and a scaled Y-Height as a <see cref="double3"/></returns>
+    /// <returns>A position with XZ point in Spherical Mercator EPSG:900913 and a scaled Y-Height as a <see cref="WorldPosition"/></returns>
     public WorldPosition GlobePointToWorldPosition(GlobePoint globePoint)
     {
         // project lat, lon to x, z - plane

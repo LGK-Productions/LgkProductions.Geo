@@ -2,6 +2,9 @@
 
 namespace LgkProductions.Geo;
 
+/// <summary>
+/// A data class storing the position of a point on the globe in latitude, longitude and altitude.
+/// </summary>
 public readonly record struct GlobePoint
 {
     public double Latitude { get; }
@@ -11,9 +14,15 @@ public readonly record struct GlobePoint
     static readonly Bounds<double> LatitudeBounds = new(-90.0, 90.0);
     static readonly Bounds<double> LongitudeBounds = new(-180.0, 180.0);
 
+    /// <summary>
+    /// The latitude as a DMS string
+    /// </summary>
     public string DmsLatitude
         => DegreeToDms(Latitude) + (Latitude < 0.0 ? " S" : " N");
 
+    /// <summary>
+    /// The longitude as a DMS string
+    /// </summary>
     public string DmsLongitude
         => DegreeToDms(Longitude) + (Longitude < 0.0 ? " W" : " E");
     
@@ -27,6 +36,11 @@ public readonly record struct GlobePoint
     public GlobePoint WithAltitude(double newAltitude)
         => new(Latitude, Longitude, newAltitude);
 
+    /// <summary>
+    /// Calculates the DMS representation of the given degree value.
+    /// </summary>
+    /// <param name="degreeValue">given degree value</param>
+    /// <returns>string representation of degree value in DMS</returns>
     static string DegreeToDms(double degreeValue)
     {
         degreeValue = Math.Abs(degreeValue);
@@ -35,7 +49,7 @@ public readonly record struct GlobePoint
         int num3 = (int)Math.Round(((degreeValue - num) * 60.0 - num2) * 60.0);
         return $"{num}° {num2,2}' {num3,2}''";
     }
-
+    
     public override string ToString()
         => $"{Latitude.ToString(CultureInfo.InvariantCulture)},{Longitude.ToString(CultureInfo.InvariantCulture)}";
 

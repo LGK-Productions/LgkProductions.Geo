@@ -16,16 +16,6 @@ public readonly record struct GlobeArea
     public Bounds<double> BoundsLon { get; }
 
     /// <summary>
-    /// Height of the rectangular area in degrees
-    /// </summary>
-    private double AreaHeight => BoundsLat.Max - BoundsLat.Min;
-
-    /// <summary>
-    /// Width of the rectangular area in degrees
-    /// </summary>
-    private double AreaWidth => BoundsLon.Max - BoundsLon.Min;
-
-    /// <summary>
     /// <see cref="GlobePoint"/> in the middle of the rectangular area on earth
     /// </summary>
     public GlobePoint MidPoint { get; }
@@ -103,7 +93,8 @@ public readonly record struct GlobeArea
     }
 
     /// <summary>
-    /// Returns the <see cref="GlobePoint"/> in the GlobeArea, nearest to the given <see cref="GlobePoint"/>
+    /// Returns the <see cref="GlobePoint"/> in the GlobeArea, nearest to the given <see cref="GlobePoint"/>, when projected
+    /// onto a flat surface
     /// </summary>
     /// <param name="globePoint">The <see cref="GlobePoint"/> to check</param>
     /// <returns>The <see cref="GlobePoint"/> in the GlobeArea, nearest to the given <see cref="GlobePoint"/></returns>
