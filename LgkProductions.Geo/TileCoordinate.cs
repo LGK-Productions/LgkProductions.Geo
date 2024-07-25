@@ -24,6 +24,12 @@ public readonly record struct TileCoordinate(int X, int Y)
 
     public static TileCoordinate operator /(TileCoordinate value, int factor)
         => new(value.X / factor, value.Y / factor);
+    
+    public static TileCoordinate operator >>(TileCoordinate value, int amount)
+        => new(value.X >> amount, value.Y >> amount);
+    
+    public static TileCoordinate operator <<(TileCoordinate value, int amount)
+        => new(value.X << amount, value.Y << amount);
 
     public static TileCoordinate One => new(1, 1);
     public static TileCoordinate Up => new(0, -1);

@@ -1,4 +1,6 @@
-﻿namespace LgkProductions.Geo;
+﻿using System.Text;
+
+namespace LgkProductions.Geo;
 
 public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
 {
@@ -17,18 +19,29 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
     }
 
     /// <summary>
+    /// Calculates top left sub-tile id of the current tile
+    /// </summary>
+    /// <param name="zoomDifference">The zoom difference</param>
+    /// <returns>The <see cref="TileId"/> of the top left sub-tile</returns>
+    public TileId GetSubTile(int zoomDifference = 1)
+    {
+        return new TileId(Coordinates << zoomDifference, Zoom + zoomDifference);
+    }
+    
+    /// <summary>
     /// Returns all sub-tiles of the current tile with the given zoom difference
     /// </summary>
     /// <param name="zoomDifference">The amount of sub-tile iterations to perform</param>
     /// <returns>An <see cref="IEnumerable{T}"/> containing all sub-tiles</returns>
     public IEnumerable<TileId> GetSubTiles(int zoomDifference = 1)
     {
-        for (var i = 0; i < Math.Pow(2, zoomDifference); i++)
+        var baseCoords = GetSubTile(zoomDifference).Coordinates;
+        
+        for (var i = 0; i < 1 << zoomDifference; i++)
         {
-            for (var j = 0; j < Math.Pow(2, zoomDifference); j++)
+            for (var j = 0; j < 1 << zoomDifference; j++)
             {
-                yield return new TileId(Coordinates * (int)Math.Pow(2, zoomDifference) + new TileCoordinate(i, j),
-                    Zoom + zoomDifference);
+                yield return new TileId(baseCoords + new TileCoordinate(i, j), Zoom + zoomDifference);
             }
         }
     }
@@ -41,8 +54,8 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
     public TileId GetParentTile(int zoomDifference = 1)
     {
         if (zoomDifference == 0) return this;
-        if (zoomDifference < 0) zoomDifference = -zoomDifference;
-        return new TileId(Coordinates / (int)Math.Pow(2, zoomDifference), Zoom - zoomDifference);
+        zoomDifference = Math.Abs(zoomDifference);
+        return new TileId(Coordinates >> zoomDifference, Zoom - zoomDifference);
     }
 
     /// <summary>
@@ -79,12 +92,34 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
             return false;
         }
 
-        return tileId.Coordinates == Coordinates / (int)Math.Pow(2, Zoom - tileId.Zoom);
+        return tileId.Coordinates == Coordinates >> Zoom - tileId.Zoom;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return $"{Zoom}_{Coordinates.X}_{Coordinates.Y}";
+    }
+    
+    /// <summary>
+    /// Calculates the matching quadkey for the this tile
+    /// </summary>
+    /// <returns>The quadkey as a string</returns>
+    /// <exception cref="ArgumentException">thrown, if the zoom is 0 (which is not possible to convert)</exception>
+    public string ToQuadKey()
+    {
+        if (Zoom == 0)
+            throw new ArgumentException("Cannot convert tile with zoom 0 to quadkey");
+        StringBuilder builder = new();
+        TileId previousTile = new();
+        for (int i = 1; i <= Zoom; i++)
+        {
+            var current = GetParentTile(Zoom - i);
+            var relativeCoords = current.Coordinates - previousTile.GetSubTile().Coordinates;
+            builder.Append(relativeCoords.X + 2 * relativeCoords.Y);
+            previousTile = current;
+        }
+        return builder.ToString();
     }
 
     /// <summary>
@@ -93,7 +128,7 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
     /// <returns><c>true</c>, if the tile coordinates are in bounds, <c>false</c> otherwise</returns>
     public bool IsInbounds()
     {
-        var maxCoord = Math.Pow(2, Zoom);
+        var maxCoord = 1 << Zoom;
         return Coordinates.X < maxCoord && Coordinates.Y < maxCoord && Coordinates.X >= 0 && Coordinates.Y >= 0;
     }
 }
