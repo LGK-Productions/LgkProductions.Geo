@@ -1,8 +1,11 @@
-﻿namespace LgkProductions.Geo.Projection;
+﻿using System.Text.Json.Serialization;
+
+namespace LgkProductions.Geo.Projection;
 
 /// <summary>
 /// Projects <see cref="GlobePoint"/>/<see cref="GlobeArea"/> to <see cref="TileId"/> and vice versa. 
 /// </summary>
+[JsonDerivedType(typeof(WebMercatorProjection), "WebMercatorProjection")]
 public interface ITileProjection
 {
     /// <summary>

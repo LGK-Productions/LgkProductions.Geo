@@ -1,4 +1,6 @@
-﻿namespace LgkProductions.Geo.Projection;
+﻿using System.Text.Json.Serialization;
+
+namespace LgkProductions.Geo.Projection;
 
 /// <summary>
 /// Projects points from <see cref="GlobePoint"/>s (lla) to positions on a flat plane.
@@ -6,6 +8,7 @@
 /// have to be scaled to match the surroundings, because most projections (most notably the Mercator-Projection)
 /// do not sustain scale.
 /// </summary>
+[JsonDerivedType(typeof(WebMercatorProjection), "WebMercatorProjection")]
 public interface IPointProjection
 {
     /// <summary>
