@@ -4,6 +4,8 @@ namespace LgkProductions.Geo;
 
 public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
 {
+    private const char Separator = '_';
+    
     public TileId(int x, int y, int zoom) : this(new TileCoordinate(x, y), zoom)
     {
     }
@@ -98,7 +100,22 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"{Zoom}_{Coordinates.X}_{Coordinates.Y}";
+        return $"{Zoom}{Separator}{Coordinates.X}{Separator}{Coordinates.Y}";
+    }
+
+    /// <summary>
+    /// Creates a new TileId from a given string of the format {Zoom}{Separator}{X}{Separator}{Y}
+    /// </summary>
+    /// <param name="key">A string of the format {Zoom}{Separator}{X}{Separator}{Y}</param>
+    /// <returns>A TileId based on the given string</returns>
+    /// <exception cref="ArgumentException">Thrown, if the string is not in expected format</exception>
+    public static TileId FromString(string key)
+    {
+            var values = key.Split(Separator);
+            if (values.Length != 3)
+                throw new ArgumentException(
+                    $"TileId key has to contain 3 values, but consists of {values.Length} values");
+            return new TileId(int.Parse(values[1]), int.Parse(values[2]), int.Parse(values[0]));
     }
     
     /// <summary>
