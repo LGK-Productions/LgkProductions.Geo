@@ -4,9 +4,6 @@ namespace LgkProductions.Geo;
 
 public readonly record struct TileCoordinate(int X, int Y)
 {
-    public readonly Vector2 AsVector()
-        => new(X, Y);
-
     public static TileCoordinate operator +(TileCoordinate left, TileCoordinate right)
         => new(left.X + right.X, left.Y + right.Y);
 
@@ -22,8 +19,8 @@ public readonly record struct TileCoordinate(int X, int Y)
     public static TileCoordinate operator *(int factor, TileCoordinate value)
         => new(value.X * factor, value.Y * factor);
 
-    public static TileCoordinate operator /(TileCoordinate value, int factor)
-        => new(value.X / factor, value.Y / factor);
+    public static TileCoordinate operator /(TileCoordinate value, int divisor)
+        => new(value.X / divisor, value.Y / divisor);
     
     public static TileCoordinate operator >>(TileCoordinate value, int amount)
         => new(value.X >> amount, value.Y >> amount);
