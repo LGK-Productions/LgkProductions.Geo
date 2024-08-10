@@ -24,6 +24,8 @@ public readonly record struct GlobeArea
     public GlobePoint NorthWestCorner => new(BoundsLat.Max, BoundsLon.Min);
     public GlobePoint SouthEastCorner => new(BoundsLat.Min, BoundsLon.Max);
     public GlobePoint SouthWestCorner => new(BoundsLat.Min, BoundsLon.Min);
+    
+    public IEnumerable<GlobePoint> Corners => new[] { NorthEastCorner, NorthWestCorner, SouthEastCorner, SouthWestCorner };
 
     /// <summary>
     /// Creates a new <see cref="GlobeArea"/> with the <see cref="GlobePoint"/> in the north-west,
