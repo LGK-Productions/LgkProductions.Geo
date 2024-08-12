@@ -7,9 +7,9 @@ namespace LgkProductions.Geo;
 /// </summary>
 public readonly record struct GlobePoint
 {
-    public double Latitude { get; }
-    public double Longitude { get; }
-    public double Altitude { get; }
+    public double Latitude { get; init; }
+    public double Longitude { get; init; }
+    public double Altitude { get; init; }
 
     static readonly Bounds<double> LatitudeBounds = new(-90.0, 90.0);
     static readonly Bounds<double> LongitudeBounds = new(-180.0, 180.0);
