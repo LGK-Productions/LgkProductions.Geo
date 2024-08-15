@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LgkProductions.Geo", "LgkProductions.Geo\LgkProductions.Geo.csproj", "{5400278C-44C9-4C11-BFC6-FFBA9C22D376}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LgkProduction-Geo.Test", "LgkProduction-Geo.Test\LgkProduction-Geo.Test.csproj", "{C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{5400278C-44C9-4C11-BFC6-FFBA9C22D376}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5400278C-44C9-4C11-BFC6-FFBA9C22D376}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5400278C-44C9-4C11-BFC6-FFBA9C22D376}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

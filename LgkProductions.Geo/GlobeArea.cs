@@ -8,12 +8,12 @@ public readonly record struct GlobeArea
     /// <summary>
     /// latitude bounds of the area in degrees with x &lt;= y
     /// </summary>
-    public Bounds<double> BoundsLat { get; }
+    public Bounds<double> BoundsLat { get; init; }
 
     /// <summary>
     /// longitude bounds of the area in degrees with x &gt;= y
     /// </summary>
-    public Bounds<double> BoundsLon { get; }
+    public Bounds<double> BoundsLon { get; init; }
 
     /// <summary>
     /// <see cref="GlobePoint"/> in the middle of the rectangular area on earth

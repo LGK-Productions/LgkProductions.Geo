@@ -10,8 +10,8 @@ namespace LgkProductions.Geo;
 [Serializable]
 public readonly record struct Bounds<T> where T : struct, INumber<T>
 {
-    public T Min { get; }
-    public T Max { get; }
+    public T Min { get; init; }
+    public T Max { get; init; }
 
     [JsonIgnore] public T Size => Max - Min;
 
