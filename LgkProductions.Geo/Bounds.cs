@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text.Json.Serialization;
 
 namespace LgkProductions.Geo;
 
@@ -11,7 +12,7 @@ public readonly record struct Bounds<T> where T : struct, INumber<T>
     public T Min { get; }
     public T Max { get; }
 
-    public T Size => Max - Min;
+    [JsonIgnore] public T Size => Max - Min;
 
     public Bounds(T min, T max)
     {
