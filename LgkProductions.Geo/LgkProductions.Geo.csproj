@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Nuget">
-		<Version>0.4.3-beta</Version>
+		<Version>0.4.4-beta</Version>
 		<PackageDescription>A small library containing data classes used in geo applications</PackageDescription>
 		<Company>LgkProductions</Company>
 		<RepositoryUrl>https://github.com/LGK-Productions/LgkProductions.Geo</RepositoryUrl>
