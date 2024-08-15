@@ -7,6 +7,7 @@ namespace LgkProductions.Geo;
 /// A class for saving generic value bounds. This ensures that Bounds.Min is smaller than Bounds.Max
 /// </summary>
 /// <typeparam name="T">The type of value to store</typeparam>
+[Serializable]
 public readonly record struct Bounds<T> where T : struct, INumber<T>
 {
     public T Min { get; }
@@ -14,12 +15,12 @@ public readonly record struct Bounds<T> where T : struct, INumber<T>
 
     [JsonIgnore] public T Size => Max - Min;
 
-    public Bounds(T min, T max)
+    public Bounds(T Min, T Max)
     {
-        if (min > max)
-            (min, max) = (max, min);
-        Min = min;
-        Max = max;
+        if (Min > Max)
+            (Min, Max) = (Max, Min);
+        this.Min = Min;
+        this.Max = Max;
     }
 
     public bool Contains(T value)
