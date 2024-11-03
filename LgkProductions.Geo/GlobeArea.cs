@@ -1,10 +1,15 @@
-﻿namespace LgkProductions.Geo;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
+
+namespace LgkProductions.Geo;
 
 /// <summary>
 /// A data class storing an rectangular area on the earth.
 /// </summary>
 public readonly record struct GlobeArea
 {
+    private const string CastPattern = @"\s*\(\s*(\(.+\))\s*,\s*(\(.+\))\s*\)\s*";
+    
     /// <summary>
     /// latitude bounds of the area in degrees with x &lt;= y
     /// </summary>
@@ -42,6 +47,18 @@ public readonly record struct GlobeArea
         var lat = BoundsLat.Min + BoundsLat.Size / 2;
         var lon = BoundsLon.Min + BoundsLon.Size / 2;
         MidPoint = new GlobePoint(lat, lon);
+    }
+    
+    /// <summary>
+    /// Converts a string to a GlobeArea, expecting the format (GlobePoint, GlobePoint)
+    /// </summary>
+    /// <param name="s">the input string</param>
+    /// <returns>A GlobeArea based on the string input</returns>
+    public static explicit operator GlobeArea(string s)
+    {
+        var match = Regex.Match(s, CastPattern);
+        if (!match.Success) throw new FormatException();
+        return new GlobeArea((GlobePoint)match.Groups[1].Value, (GlobePoint)match.Groups[2].Value);
     }
 
     /// <summary>

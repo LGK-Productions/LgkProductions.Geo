@@ -1,5 +1,7 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace LgkProductions.Geo;
 
@@ -10,6 +12,8 @@ namespace LgkProductions.Geo;
 [Serializable]
 public readonly record struct Bounds<T> where T : struct, INumber<T>
 {
+    private const string CastPattern = @"\s*\(\s*(\S+)\s*,\s*(\S+)\s*\)\s*";
+    
     public T Min { get; init; }
     public T Max { get; init; }
 
@@ -21,6 +25,18 @@ public readonly record struct Bounds<T> where T : struct, INumber<T>
             (Min, Max) = (Max, Min);
         this.Min = Min;
         this.Max = Max;
+    }
+    
+    /// <summary>
+    /// Converts a string to a Bounds object, expecting the format (number, number)
+    /// </summary>
+    /// <param name="s">the input string</param>
+    /// <returns>A Bounds object based on the string input</returns>
+    public static explicit operator Bounds<T>(string s)
+    {
+        var match = Regex.Match(s, CastPattern);
+        if (!match.Success) throw new FormatException();
+        return new Bounds<T>(T.Parse(match.Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture), T.Parse(match.Groups[2].Value, NumberStyles.Any, CultureInfo.InvariantCulture));
     }
 
     public bool Contains(T value)

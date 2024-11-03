@@ -1,13 +1,27 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace LgkProductions.Geo;
 
 public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
 {
     private const char Separator = '_';
+    private const string CastPattern = @"\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)\s*";
     
     public TileId(int x, int y, int zoom) : this(new TileCoordinate(x, y), zoom)
     {
+    }
+
+    /// <summary>
+    /// Converts a string to a TileId, expecting the format (int, int, int)
+    /// </summary>
+    /// <param name="s">the input string</param>
+    /// <returns>A TileId based on the string input</returns>
+    public static explicit operator TileId(string s)
+    {
+        var match = Regex.Match(s, CastPattern);
+        if (!match.Success) throw new FormatException();
+        return new TileId(int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), int.Parse(match.Groups[3].Value));
     }
 
     /// <summary>

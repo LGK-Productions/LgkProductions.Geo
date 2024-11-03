@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace LgkProductions.Geo;
 
@@ -13,6 +14,8 @@ public readonly record struct GlobePoint
 
     static readonly Bounds<double> LatitudeBounds = new(-90.0, 90.0);
     static readonly Bounds<double> LongitudeBounds = new(-180.0, 180.0);
+    
+    private const string CastPattern = @"\s*\(\s*(\S+)\s*,\s*(\S+)\s*(,\s*(\S+)\s*)?\)\s*";
 
     /// <summary>
     /// The latitude as a DMS string
@@ -35,6 +38,21 @@ public readonly record struct GlobePoint
 
     public GlobePoint WithAltitude(double newAltitude)
         => new(Latitude, Longitude, newAltitude);
+    
+    /// <summary>
+    /// Converts a string to a GlobePoint, expecting the format (lat, lng, alt)
+    /// </summary>
+    /// <param name="s">the input string</param>
+    /// <returns>A GlobePoint based on the string input</returns>
+    public static explicit operator GlobePoint(string s)
+    {
+        var match = Regex.Match(s, CastPattern);
+        if (!match.Success) throw new FormatException();
+        return new GlobePoint(double.Parse(match.Groups[1].Value, NumberStyles.Number, CultureInfo.InvariantCulture), 
+            double.Parse(match.Groups[2].Value, NumberStyles.Any, CultureInfo.InvariantCulture),
+            match.Groups[4].Value != "" ? double.Parse(match.Groups[4].Value, NumberStyles.Any, CultureInfo.InvariantCulture)
+                : 0);
+    }
 
     /// <summary>
     /// Calculates the DMS representation of the given degree value.
