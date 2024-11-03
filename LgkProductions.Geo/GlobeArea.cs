@@ -54,11 +54,11 @@ public readonly record struct GlobeArea
     /// </summary>
     /// <param name="s">the input string</param>
     /// <returns>A GlobeArea based on the string input</returns>
-    public static explicit operator GlobeArea(string s)
+    public static GlobeArea Parse(string s)
     {
         var match = Regex.Match(s, CastPattern);
         if (!match.Success) throw new FormatException();
-        return new GlobeArea((GlobePoint)match.Groups[1].Value, (GlobePoint)match.Groups[2].Value);
+        return new GlobeArea(GlobePoint.Parse(match.Groups[1].Value), GlobePoint.Parse(match.Groups[2].Value));
     }
 
     /// <summary>

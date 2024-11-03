@@ -23,11 +23,11 @@ public class Tests
     {
         string success = "( 0,  1, 2)";
         string fail = "0,  1, #2)";
-        var TileId = (TileId)success;
-        Assert.That(TileId, Is.EqualTo(new TileId(0, 1, 2)));
+        var id = TileId.Parse(success);
+        Assert.That(id, Is.EqualTo(new TileId(0, 1, 2)));
         Assert.Catch(typeof(FormatException), () =>
         {
-            var res = (TileId)fail;
+            var res = TileId.Parse(fail);
         });
     }
     
@@ -37,13 +37,13 @@ public class Tests
         string successInt = "(1, 2)";
         string successfloat = "(1.2, 2.5)";
         string fail = "0,  1, #2)";
-        var boundsi = (Bounds<int>)successInt;
-        var boundsf = (Bounds<float>)successfloat;
+        var boundsi = Bounds<int>.Parse(successInt);
+        var boundsf = Bounds<float>.Parse(successfloat);
         Assert.That(boundsi, Is.EqualTo(new Bounds<int>(1, 2)));
         Assert.That(boundsf, Is.EqualTo(new Bounds<float>(1.2f, 2.5f)));
         Assert.Catch(typeof(FormatException), () =>
         {
-            var res = (Bounds<int>)fail;
+            var res = Bounds<int>.Parse(fail);
         });
     }
     
@@ -53,11 +53,11 @@ public class Tests
         string success1 = "(1, 2)";
         string success2 = "(1.2, 2.5, 350)";
         string fail = "0,  1, #2)";
-        Assert.That((GlobePoint)success1, Is.EqualTo(new GlobePoint(1, 2)));
-        Assert.That((GlobePoint)success2, Is.EqualTo(new GlobePoint(1.2d, 2.5d, 350)));
+        Assert.That(GlobePoint.Parse(success1), Is.EqualTo(new GlobePoint(1, 2)));
+        Assert.That(GlobePoint.Parse(success2), Is.EqualTo(new GlobePoint(1.2d, 2.5d, 350)));
         Assert.Catch(typeof(FormatException), () =>
         {
-            var res = (GlobePoint)fail;
+            var res = GlobePoint.Parse(fail);
         });
     }
     
@@ -67,11 +67,11 @@ public class Tests
         string success1 = "((1, 2), (3, 4))";
         string success2 = "((1.2, 2.5, 350), (0.5, 1.5, 350))";
         string fail = "((), ())";
-        Assert.That((GlobeArea)success1, Is.EqualTo(new GlobeArea(new GlobePoint(1, 2), new GlobePoint(3, 4))));
-        Assert.That((GlobeArea)success2, Is.EqualTo(new GlobeArea(new GlobePoint(0.5, 1.5d, 350), new GlobePoint(1.2d, 2.5d))));
+        Assert.That(GlobeArea.Parse(success1), Is.EqualTo(new GlobeArea(new GlobePoint(1, 2), new GlobePoint(3, 4))));
+        Assert.That(GlobeArea.Parse(success2), Is.EqualTo(new GlobeArea(new GlobePoint(0.5, 1.5d, 350), new GlobePoint(1.2d, 2.5d))));
         Assert.Catch(typeof(FormatException), () =>
         {
-            var res = (GlobePoint)fail;
+            var res = GlobeArea.Parse(fail);
         });
     }
 }

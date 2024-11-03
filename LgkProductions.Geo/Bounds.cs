@@ -32,7 +32,7 @@ public readonly record struct Bounds<T> where T : struct, INumber<T>
     /// </summary>
     /// <param name="s">the input string</param>
     /// <returns>A Bounds object based on the string input</returns>
-    public static explicit operator Bounds<T>(string s)
+    public static Bounds<T> Parse(string s)
     {
         var match = Regex.Match(s, CastPattern);
         if (!match.Success) throw new FormatException();
