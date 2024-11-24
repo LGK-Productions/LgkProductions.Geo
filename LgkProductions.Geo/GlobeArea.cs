@@ -66,19 +66,16 @@ public readonly record struct GlobeArea
     /// </summary>
     /// <param name="resolution">the amount of points on each axis</param>
     /// <returns>a resolution x resolution grid of GlobePoints</returns>
-    public List<GlobePoint> GetPointGrid(int resolution)
+    public IEnumerable<GlobePoint> GetPointGrid(int resolution)
     {
-        List<GlobePoint> pointGrid = [];
         for (var i = 0; i < resolution; i++)
         {
             for (var j = 0; j < resolution; j++)
             {
-                pointGrid.Add(new GlobePoint(BoundsLat.Min + i * (BoundsLat.Size / (resolution - 1)),
-                    BoundsLon.Min + j * (BoundsLon.Size / (resolution - 1))));
+                yield return new GlobePoint(BoundsLat.Min + i * (BoundsLat.Size / (resolution - 1)),
+                    BoundsLon.Min + j * (BoundsLon.Size / (resolution - 1)));
             }
         }
-
-        return pointGrid;
     }
 
     /// <summary>
