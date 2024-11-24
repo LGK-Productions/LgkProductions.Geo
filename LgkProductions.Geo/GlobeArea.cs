@@ -66,7 +66,7 @@ public readonly record struct GlobeArea
     /// </summary>
     /// <param name="resolution">the amount of points on each axis</param>
     /// <returns>a resolution x resolution grid of GlobePoints</returns>
-    public IReadOnlyList<GlobePoint> GetPointGrid(int resolution)
+    public List<GlobePoint> GetPointGrid(int resolution)
     {
         List<GlobePoint> pointGrid = [];
         for (var i = 0; i < resolution; i++)
