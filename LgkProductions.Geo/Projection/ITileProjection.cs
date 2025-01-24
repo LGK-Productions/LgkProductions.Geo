@@ -14,8 +14,9 @@ public interface ITileProjection
     /// </summary>
     /// <param name="globePoint">The <see cref="GlobePoint"/> to calculate the absolute tile coordinates for</param>
     /// <param name="zoomFactor">The Zoom-Factor to get the absolute tile coordinates for</param>
+    /// <param name="clamp">Whether the <paramref name="globePoint"/> should be clamped to a matching value range</param>
     /// <returns>The absolute tile coordinates of the tile containing the given <see cref="GlobePoint"/></returns>
-    public TileCoordinate GlobePointToTileCoordinates(GlobePoint globePoint, int zoomFactor);
+    public TileCoordinate GlobePointToTileCoordinates(GlobePoint globePoint, int zoomFactor, bool clamp = true);
 
     /// <summary>
     /// Calculates the <see cref="GlobePoint"/> at the north-west corner of the tile with the given absolute tile coordinates

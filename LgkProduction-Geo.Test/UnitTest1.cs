@@ -1,5 +1,6 @@
 using System.Text.Json;
 using LgkProductions.Geo;
+using LgkProductions.Geo.Projection;
 
 namespace LgkProduction_Geo.Test;
 
@@ -8,6 +9,29 @@ public class Tests
     [SetUp]
     public void Setup()
     {
+    }
+
+    [Test]
+    public void GlobePointEdgeTest()
+    {
+        var proj = new WebMercatorProjection();
+        
+        var gb1 = new GlobePoint(90, 180);
+        var gb2 = new GlobePoint(90, -180);
+        var gb3 = new GlobePoint(-90, 180);
+        var gb4 = new GlobePoint(-90, -180);
+
+        var tc1 = proj.GlobePointToTileCoordinates(gb1, 1);
+        var tc2 = proj.GlobePointToTileCoordinates(gb2, 1);
+        var tc3 = proj.GlobePointToTileCoordinates(gb3, 1);
+        var tc4 = proj.GlobePointToTileCoordinates(gb4, 1);
+        Assert.Multiple(() =>
+        {
+            Assert.That(tc1, Is.EqualTo(new TileCoordinate(1, 0)));
+            Assert.That(tc2, Is.EqualTo(new TileCoordinate(0, 0)));
+            Assert.That(tc3, Is.EqualTo(new TileCoordinate(1, 1)));
+            Assert.That(tc4, Is.EqualTo(new TileCoordinate(0, 1)));
+        });
     }
 
     [Test]

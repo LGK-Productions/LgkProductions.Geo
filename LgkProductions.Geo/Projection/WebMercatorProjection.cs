@@ -23,6 +23,18 @@ public sealed class WebMercatorProjection : IProjection
     /// Shifts the origin by half the Earth's circumference
     /// </summary>
     private const double OriginShift = 2 * Math.PI * EarthRadius / 2.0;
+    
+    /// <summary>
+    /// The maximum latitude usable by tile calculation. GlobePoints might accept higher Latitudes, but tile calculations
+    /// will not work when using values higher than the specified maximum. By default values will get clamped
+    /// </summary>
+    private const double MaxLatitude = 85.05112877980659;
+    
+    /// <summary>
+    /// The maximum longitude usable by tile calculation. GlobePoints might accept higher longitudes, but tile calculations
+    /// will not work when using values higher than the specified maximum. By default values will get clamped
+    /// </summary>
+    private const double MaxLongitude = 179.9998;
 
     /// <summary>
     /// Converts a given <see cref="GlobePoint"/> in WGS84 to a XZ in Spherical Mercator EPSG:900913 with a scaled Y-height,
@@ -60,23 +72,26 @@ public sealed class WebMercatorProjection : IProjection
         return globePoint.WithAltitude(position.Y / GetScaleFactor(globePoint));
     }
 
-    /// <summary>
-    /// Calculates the absolute tile coordinates of the tile containing the given <see cref="GlobePoint"/> based on
-    /// the given Zoom-Factor.
-    /// </summary>
-    /// <param name="globePoint">The <see cref="GlobePoint"/> to calculate the absolute tile coordinates for</param>
-    /// <param name="zoomFactor">The Zoom-Factor to get the absolute tile coordinates for</param>
-    /// <returns>The absolute tile coordinates of the tile containing the given <see cref="GlobePoint"/></returns>
-    public TileCoordinate GlobePointToTileCoordinates(GlobePoint globePoint, int zoomFactor)
+    /// <inheritdoc/>
+    public TileCoordinate GlobePointToTileCoordinates(GlobePoint globePoint, int zoomFactor, bool clamp = true)
     {
+        if (clamp)
+        {
+            globePoint = globePoint with
+            {
+                Longitude = Math.Clamp(globePoint.Longitude, -MaxLongitude, MaxLongitude),
+                Latitude = Math.Clamp(globePoint.Latitude, -MaxLatitude, MaxLatitude)
+            };
+        }
+        
         var latRad = globePoint.Latitude / 180 * Math.PI;
+        var n = 1 << zoomFactor;
         return new TileCoordinate()
         {
             //Longitude to tileX
-            X = (int)Math.Floor((globePoint.Longitude + 180) / 360 * (1 << zoomFactor)),
+            X = (int)(n * ((globePoint.Longitude + 180) / 360)),
             //Latitude to tileY
-            Y = (int)Math.Floor((1 - Math.Log(Math.Tan(latRad) + 1 / Math.Cos(latRad)) / Math.PI)
-                / 2 * (1 << zoomFactor))
+            Y = (int)(n * (1 - Math.Log(Math.Tan(latRad) + (1 / Math.Cos(latRad))) / Math.PI)) / 2
         };
     }
 
@@ -88,11 +103,11 @@ public sealed class WebMercatorProjection : IProjection
     /// <returns>A <see cref="GlobePoint"/> at the north-west corner of the tile</returns>
     public GlobePoint TileToGlobePoint(TileId tile)
     {
-        var tmp = Math.PI - 2.0 * Math.PI * tile.Coordinates.Y / (1 << tile.Zoom);
-
+        var n = 1 << tile.Zoom;
+        var latRad = Math.Atan(Math.Sinh(Math.PI * (1 - 2 * tile.Coordinates.Y / (double)n)));
         return new GlobePoint(
-            180.0 / Math.PI * Math.Atan(0.5 * (Math.Exp(tmp) - Math.Exp(-tmp))),
-            tile.Coordinates.X / (double)(1 << tile.Zoom) * 360 - 180);
+            latRad * 180 / Math.PI,
+            (double)tile.Coordinates.X / n * 360 - 180);
     }
 
     /// <summary>

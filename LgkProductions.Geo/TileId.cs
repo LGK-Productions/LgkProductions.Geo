@@ -159,7 +159,7 @@ public readonly record struct TileId(TileCoordinate Coordinates, int Zoom)
     /// <returns><c>true</c>, if the tile coordinates are in bounds, <c>false</c> otherwise</returns>
     public bool IsInbounds()
     {
-        var maxCoord = 1 << Zoom;
+        var maxCoord = 1 << Zoom - 1;
         return Coordinates.X < maxCoord && Coordinates.Y < maxCoord && Coordinates.X >= 0 && Coordinates.Y >= 0;
     }
 }
