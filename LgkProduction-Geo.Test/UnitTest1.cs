@@ -35,6 +35,23 @@ public class Tests
     }
 
     [Test]
+    public void AreaToTileTest()
+    {
+        ITileProjection proj = new WebMercatorProjection();
+        var area = new GlobeArea(new GlobePoint(49.005729548130219, 8.4077308471588044),
+            new GlobePoint(49.017513754548503, 8.4256971528411952));
+        var tiles = proj.GlobeAreaToTiles(area, new Bounds<int>(0, 19), 4).ToArray();
+        TileId[] expected =
+        [
+            new TileId(8574, 5625, 14),
+            new TileId(8574, 5626, 14),
+            new TileId(8575, 5625, 14),
+            new TileId(8575, 5626, 14)
+        ];
+        Assert.That(tiles, Is.EqualTo(expected));
+    }
+
+    [Test]
     public void Test1()
     {
         string json = "{\"ZoomBounds\": {\"Min\": 0,\"Max\": 19}}";

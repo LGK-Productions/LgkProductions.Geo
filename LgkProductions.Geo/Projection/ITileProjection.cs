@@ -45,18 +45,20 @@ public interface ITileProjection
     /// <returns>An IEnumerable of tiles covering the given <see cref="GlobeArea"/></returns>
     public IEnumerable<TileId> GlobeAreaToTiles(GlobeArea globeArea, int zoomFactor)
     {
-        var tileCoordinates = GlobePointToTileCoordinates(globeArea.NorthWestCorner, zoomFactor);
         var ne = GlobePointToTileCoordinates(globeArea.NorthEastCorner, zoomFactor);
         var sw = GlobePointToTileCoordinates(globeArea.SouthWestCorner, zoomFactor);
-        for (var x = tileCoordinates.X; x <= ne.X; x++)
+        return EnumerateTiles(ne, sw, zoomFactor);
+    }
+
+    private IEnumerable<TileId> EnumerateTiles(TileCoordinate corner1, TileCoordinate corner2, int zoomFactor)
+    {
+        var boundsX = new Bounds<int>(corner1.X, corner2.X);
+        var boundsY = new Bounds<int>(corner1.Y, corner2.Y);
+        for (var x = boundsX.Min; x <= boundsX.Max; x++)
         {
-            for (var y = tileCoordinates.Y; y <= sw.Y; y++)
+            for (var y = boundsY.Min; y <= boundsY.Max; y++)
             {
-                var tile = new TileId(new(x, y), zoomFactor);
-                if (tile.IsInbounds())
-                {
-                    yield return tile;
-                }
+                yield return new TileId(new(x, y), zoomFactor);
             }
         }
     }
@@ -72,18 +74,19 @@ public interface ITileProjection
     public IEnumerable<TileId> GlobeAreaToTiles(GlobeArea globeArea, Bounds<int> zoomBounds, int targetTileCount)
     {
         var currentZoom = zoomBounds.Min;
-
         while (true)
         {
-            var tileCoordinates = GlobePointToTileCoordinates(globeArea.NorthWestCorner, currentZoom);
             var ne = GlobePointToTileCoordinates(globeArea.NorthEastCorner, currentZoom);
             var sw = GlobePointToTileCoordinates(globeArea.SouthWestCorner, currentZoom);
+            
+            var xBounds = new Bounds<int>(ne.X, sw.X);
+            var yBounds = new Bounds<int>(ne.Y, sw.Y);
 
-
-            if ((ne.X - tileCoordinates.X + 1) * (sw.Y - tileCoordinates.Y + 1) > targetTileCount)
-            {
+            var tileCount = (xBounds.Size + 1) * (yBounds.Size + 1);
+            if (tileCount == targetTileCount)
+                return EnumerateTiles(ne, sw, currentZoom);
+            else if (tileCount > targetTileCount)
                 return GlobeAreaToTiles(globeArea, Math.Clamp(currentZoom - 1, zoomBounds.Min, zoomBounds.Max));
-            }
 
             currentZoom++;
 

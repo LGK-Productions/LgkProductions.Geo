@@ -13,5 +13,6 @@
     &lt;TestId&gt;NUnit3x::C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2::net8.0::LgkProduction_Geo.Test.Tests.StringToGlobeArea&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2::net8.0::LgkProduction_Geo.Test.Tests.GlobePointEdgeTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2::net8.0::LgkProduction_Geo.Test.Tests.TileCoordEdgeTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::C0AD14BA-34A6-4CD9-A67A-EFDE6DAD56E2::net8.0::LgkProduction_Geo.Test.Tests.AreaToTileTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
