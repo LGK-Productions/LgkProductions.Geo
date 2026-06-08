@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace LgkProductions.Geo;
@@ -12,20 +13,25 @@ public readonly record struct GlobePoint
     public double Longitude { get; init; }
     public double Altitude { get; init; }
 
+    [JsonIgnore]
     static readonly Bounds<double> LatitudeBounds = new(-90.0, 90.0);
+    [JsonIgnore]
     static readonly Bounds<double> LongitudeBounds = new(-180.0, 180.0);
     
+    [JsonIgnore]
     private const string CastPattern = @"\s*\(\s*(\S+)\s*,\s*(\S+)\s*(,\s*(\S+)\s*)?\)\s*";
 
     /// <summary>
     /// The latitude as a DMS string
     /// </summary>
+    [JsonIgnore]
     public string DmsLatitude
         => DegreeToDms(Latitude) + (Latitude < 0.0 ? " S" : " N");
 
     /// <summary>
     /// The longitude as a DMS string
     /// </summary>
+    [JsonIgnore]
     public string DmsLongitude
         => DegreeToDms(Longitude) + (Longitude < 0.0 ? " W" : " E");
     
@@ -54,6 +60,7 @@ public readonly record struct GlobePoint
                 : 0);
     }
 
+    
     /// <summary>
     /// Calculates the DMS representation of the given degree value.
     /// </summary>

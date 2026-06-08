@@ -9,7 +9,6 @@ namespace LgkProductions.Geo;
 /// A class for saving generic value bounds. This ensures that Bounds.Min is smaller than Bounds.Max
 /// </summary>
 /// <typeparam name="T">The type of value to store</typeparam>
-[Serializable]
 public readonly record struct Bounds<T> where T : struct, INumber<T>
 {
     private const string CastPattern = @"\s*\(\s*(\S+)\s*,\s*(\S+)\s*\)\s*";
